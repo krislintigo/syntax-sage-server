@@ -1,4 +1,5 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import '../config/env.js'
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors, serveStatic } from '@feathersjs/koa'
@@ -49,8 +50,6 @@ app.hooks({
 })
 // Register application setup and teardown hooks here
 app.hooks({
-  setup: [],
-  teardown: [],
   before: {
     create: [schemaHooks.resolveData(appCreateResolver)],
     patch: [schemaHooks.resolveData(appPatchResolver)]
