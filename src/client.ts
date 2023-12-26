@@ -4,6 +4,15 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { termClient } from './services/term/term.shared'
+
+import { userClient } from './services/user/user.shared'
+
+import { wordClient } from './services/word/word.shared'
+export type { Term, TermData, TermQuery, TermPatch } from './services/term/term.shared'
+export type { User, UserData, UserQuery, UserPatch } from './services/user/user.shared'
+export type { Word, WordData, WordQuery, WordPatch } from './services/word/word.shared'
+
 export interface Configuration {
   connection: TransportConnection<ServiceTypes>
 }
@@ -20,7 +29,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any,>(
+export const createClient = <Configuration = any>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
@@ -30,5 +39,8 @@ export const createClient = <Configuration = any,>(
   client.configure(authenticationClient(authenticationOptions))
   client.set('connection', connection)
 
+  client.configure(wordClient)
+  client.configure(userClient)
+  client.configure(termClient)
   return client
 }

@@ -6,10 +6,12 @@ import socketio from '@feathersjs/socketio'
 
 import { configurationValidator } from './configuration'
 import type { Application } from './declarations'
-import { logError } from './hooks/log-error'
 import { mongodb } from './mongodb'
-import { services } from './services/index'
+import { services } from './services'
 import { channels } from './channels'
+import { logError } from './logger'
+import { hooks as schemaHooks } from '@feathersjs/schema'
+import { appCreateResolver, appPatchResolver } from './app.schema'
 
 const app: Application = koa(feathers())
 
@@ -48,7 +50,11 @@ app.hooks({
 // Register application setup and teardown hooks here
 app.hooks({
   setup: [],
-  teardown: []
+  teardown: [],
+  before: {
+    create: [schemaHooks.resolveData(appCreateResolver)],
+    patch: [schemaHooks.resolveData(appPatchResolver)]
+  }
 })
 
 export { app }
