@@ -21,6 +21,7 @@ export class WordService<ServiceParams extends Params = WordParams> extends Mong
 export const getOptions = (app: Application): MongoDBAdapterOptions => {
   return {
     paginate: app.get('paginate'),
-    Model: app.get('mongodbClient').then((db) => db.collection('words'))
+    Model: app.get('mongodbClient').then((db) => db.collection('words')),
+    operators: ['$regex', '$options']
   }
 }

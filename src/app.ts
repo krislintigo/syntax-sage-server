@@ -8,6 +8,7 @@ import socketio from '@feathersjs/socketio'
 import { configurationValidator } from './configuration'
 import type { Application } from './declarations'
 import { mongodb } from './mongodb'
+import { authentication } from './authentication'
 import { services } from './services'
 import { channels } from './channels'
 import { logError } from './logger'
@@ -35,25 +36,27 @@ app.configure(
     }
   })
 )
-app.configure(mongodb)
-app.configure(services)
 app.configure(channels)
+app.configure(mongodb)
+app.configure(authentication)
+app.configure(services)
 
 // Register hooks that run on all service methods
 app.hooks({
   around: {
     all: [logError]
   },
-  before: {},
+  before: {
+    create: [schemaHooks.resolveData(appCreateResolver)],
+    patch: [schemaHooks.resolveData(appPatchResolver)]
+  },
   after: {},
   error: {}
 })
 // Register application setup and teardown hooks here
 app.hooks({
-  before: {
-    create: [schemaHooks.resolveData(appCreateResolver)],
-    patch: [schemaHooks.resolveData(appPatchResolver)]
-  }
+  setup: [],
+  teardown: []
 })
 
 export { app }

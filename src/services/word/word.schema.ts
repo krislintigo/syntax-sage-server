@@ -1,6 +1,6 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
-import { Type, getValidator, querySyntax, ObjectIdSchema } from '@feathersjs/typebox'
+import { Type, getValidator, querySyntax, ObjectIdSchema, StringEnum } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
@@ -13,9 +13,12 @@ export const wordSchema = Type.Object(
   {
     _id: ObjectIdSchema(),
 
+    course: StringEnum(['rus-fin']),
     original: Type.String(),
-    english: Type.String(),
     local: Type.String(),
+    english: Type.String(),
+
+    categories: Type.Array(Type.String()),
 
     ...createdAndUpdatedAt
   },
@@ -44,7 +47,7 @@ export const wordPatchValidator = getValidator(wordPatchSchema, dataValidator)
 export const wordPatchResolver = resolve<Word, HookContext<WordService>>({})
 
 // Schema for allowed query properties
-export const wordQueryProperties = Type.Pick(wordSchema, [])
+export const wordQueryProperties = Type.Omit(wordSchema, [])
 export const wordQuerySchema = Type.Intersect(
   [
     querySyntax(wordQueryProperties),

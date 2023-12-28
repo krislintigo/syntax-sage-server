@@ -1,7 +1,8 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/typescript.html
-import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
-import { Application as FeathersApplication } from '@feathersjs/koa'
-import { ApplicationConfiguration } from './configuration'
+import { type HookContext as FeathersHookContext, type NextFunction } from '@feathersjs/feathers'
+import { type Application as FeathersApplication } from '@feathersjs/koa'
+import { type ApplicationConfiguration } from './configuration'
+import { type User } from './services/user/user.schema'
 
 export type { NextFunction }
 
@@ -18,3 +19,10 @@ export type Application = FeathersApplication<ServiceTypes, Configuration>
 
 // The context for hook functions - can be typed with a service class
 export type HookContext<S = any> = FeathersHookContext<Application, S>
+
+// Add the users as an optional property to all params
+declare module '@feathersjs/feathers' {
+  interface Params {
+    users?: User
+  }
+}

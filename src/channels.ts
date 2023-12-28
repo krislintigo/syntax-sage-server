@@ -10,6 +10,9 @@ export const channels = (app: Application) => {
     'Publishing all events to all authenticated users. See `channels.ts` and https://dove.feathersjs.com/api/channels.html for more information.'
   )
 
+  // If no real-time functionality has been configured just return
+  if (typeof app.channel !== 'function') return
+
   app.on('connection', (connection: RealTimeConnection) => {
     // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection)

@@ -1,12 +1,13 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
-import { Type, getValidator, querySyntax, ObjectIdSchema } from '@feathersjs/typebox'
+import { Type, getValidator, querySyntax, ObjectIdSchema, StringEnum } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
 import type { UserService } from './user.class'
 import { createdAndUpdatedAt } from '../common.schema'
+import { passwordHash } from '@feathersjs/authentication-local'
 
 // Main data model schema
 export const userSchema = Type.Object(
@@ -16,6 +17,8 @@ export const userSchema = Type.Object(
     login: Type.String(),
     password: Type.String(),
 
+    roles: Type.Array(StringEnum(['student', 'system-admin'])),
+
     ...createdAndUpdatedAt
   },
   { $id: 'User', additionalProperties: false }
@@ -24,7 +27,9 @@ export type User = Static<typeof userSchema>
 export const userValidator = getValidator(userSchema, dataValidator)
 export const userResolver = resolve<User, HookContext<UserService>>({})
 
-export const userExternalResolver = resolve<User, HookContext<UserService>>({})
+export const userExternalResolver = resolve<User, HookContext<UserService>>({
+  password: async () => undefined
+})
 
 // Schema for creating new entries
 export const userDataSchema = Type.Omit(userSchema, ['_id'], {
@@ -32,7 +37,9 @@ export const userDataSchema = Type.Omit(userSchema, ['_id'], {
 })
 export type UserData = Static<typeof userDataSchema>
 export const userDataValidator = getValidator(userDataSchema, dataValidator)
-export const userDataResolver = resolve<User, HookContext<UserService>>({})
+export const userDataResolver = resolve<User, HookContext<UserService>>({
+  password: passwordHash({ strategy: 'local' })
+})
 
 // Schema for updating existing entries
 export const userPatchSchema = Type.Partial(userDataSchema, {

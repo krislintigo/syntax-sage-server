@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/logging.html
 import { createLogger, format, transports } from 'winston'
-import type {HookContext, NextFunction} from "./declarations";
+import type { HookContext, NextFunction } from './declarations'
 
 // Configure the Winston logger. For the complete documentation see https://github.com/winstonjs/winston
 export const logger = createLogger({

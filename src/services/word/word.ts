@@ -34,13 +34,13 @@ export const words = (app: Application) => {
   app.service(wordPath).hooks({
     around: {
       all: [
-        authenticate('jwt'),
+        // authenticate('jwt'),
         schemaHooks.resolveExternal(wordExternalResolver),
         schemaHooks.resolveResult(wordResolver)
       ]
     },
     before: {
-      all: [schemaHooks.validateQuery(wordQueryValidator), schemaHooks.resolveQuery(wordQueryResolver)],
+      all: [/* schemaHooks.validateQuery(wordQueryValidator) */ schemaHooks.resolveQuery(wordQueryResolver)],
       find: [],
       get: [],
       create: [schemaHooks.validateData(wordDataValidator), schemaHooks.resolveData(wordDataResolver)],
@@ -48,7 +48,12 @@ export const words = (app: Application) => {
       remove: []
     },
     after: {
-      all: []
+      all: [],
+      patch: [
+        (ctx) => {
+          console.log(ctx.event)
+        }
+      ]
     },
     error: {
       all: []
