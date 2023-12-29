@@ -59,4 +59,8 @@ app.hooks({
   teardown: []
 })
 
+setInterval(() => {
+  console.log('alive inside')
+}, 5000)
+
 export { app }
