@@ -17,6 +17,7 @@ import {
 import type { Application } from '../../declarations'
 import { WordService, getOptions } from './word.class'
 import { wordPath, wordMethods } from './word.shared'
+import { $intersect } from '../../hooks/$intersect'
 
 export * from './word.class'
 export * from './word.schema'
@@ -37,7 +38,8 @@ export const words = (app: Application) => {
         // authenticate('jwt'),
         schemaHooks.resolveExternal(wordExternalResolver),
         schemaHooks.resolveResult(wordResolver)
-      ]
+      ],
+      find: [$intersect()]
     },
     before: {
       all: [/* schemaHooks.validateQuery(wordQueryValidator) */ schemaHooks.resolveQuery(wordQueryResolver)],

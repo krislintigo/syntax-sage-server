@@ -17,6 +17,7 @@ export const wordSchema = Type.Object(
     original: Type.String(),
     local: Type.String(),
     english: Type.String(),
+    notes: Type.String(),
 
     categories: Type.Array(Type.String()),
 

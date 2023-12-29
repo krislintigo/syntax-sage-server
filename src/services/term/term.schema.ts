@@ -1,5 +1,5 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve } from '@feathersjs/schema'
+import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax, ObjectIdSchema } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
@@ -17,8 +17,12 @@ export const termSchema = Type.Object(
     word: Type.Ref(wordSchema),
     userId: ObjectIdSchema(),
 
-    favourite: Type.Boolean(),
-    studies: Type.Number(),
+    favorite: Type.Boolean(),
+    studies: Type.Object({
+      match: Type.Number({ minimum: 0 }),
+      audio: Type.Number({ minimum: 0 }),
+      writing: Type.Number({ minimum: 0 })
+    }),
 
     ...createdAndUpdatedAt,
     lastStudiedAt: dateString('date-time')
@@ -27,12 +31,16 @@ export const termSchema = Type.Object(
 )
 export type Term = Static<typeof termSchema>
 export const termValidator = getValidator(termSchema, dataValidator)
-export const termResolver = resolve<Term, HookContext<TermService>>({})
+export const termResolver = resolve<Term, HookContext<TermService>>({
+  word: virtual(async ({ wordId }, { app }) => {
+    return await app.service('words').get(wordId as string)
+  })
+})
 
 export const termExternalResolver = resolve<Term, HookContext<TermService>>({})
 
 // Schema for creating new entries
-export const termDataSchema = Type.Omit(termSchema, ['_id'], {
+export const termDataSchema = Type.Omit(termSchema, ['_id', 'word'], {
   $id: 'TermData'
 })
 export type TermData = Static<typeof termDataSchema>
