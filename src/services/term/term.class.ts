@@ -21,6 +21,7 @@ export class TermService<ServiceParams extends Params = TermParams> extends Mong
 export const getOptions = (app: Application): MongoDBAdapterOptions => {
   return {
     paginate: app.get('paginate'),
-    Model: app.get('mongodbClient').then((db) => db.collection('terms'))
+    Model: app.get('mongodbClient').then((db) => db.collection('terms')),
+    multi: true
   }
 }
