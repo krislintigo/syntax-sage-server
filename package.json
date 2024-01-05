@@ -58,6 +58,7 @@
     "@feathersjs/socketio": "^5.0.13",
     "@feathersjs/transport-commons": "^5.0.13",
     "@feathersjs/typebox": "^5.0.13",
+    "lodash": "^4.17.21",
     "mongodb": "^6.3.0",
     "winston": "^3.11.0"
   },
@@ -65,6 +66,7 @@
     "@feathersjs/authentication": "^5.0.13",
     "@feathersjs/cli": "5.0.13",
     "@feathersjs/rest-client": "^5.0.13",
+    "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.10.6",
     "axios": "^1.6.3",
