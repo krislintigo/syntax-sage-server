@@ -61,7 +61,12 @@ export const termQuerySchema = Type.Intersect(
   [
     querySyntax(termQueryProperties),
     // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
+    Type.Object(
+      {
+        word: Type.Optional(Type.Object({}))
+      },
+      { additionalProperties: false }
+    )
   ],
   { additionalProperties: false }
 )

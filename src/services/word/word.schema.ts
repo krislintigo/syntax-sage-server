@@ -51,9 +51,18 @@ export const wordPatchResolver = resolve<Word, HookContext<WordService>>({})
 export const wordQueryProperties = Type.Omit(wordSchema, [])
 export const wordQuerySchema = Type.Intersect(
   [
-    querySyntax(wordQueryProperties),
+    querySyntax(wordQueryProperties, {
+      original: { $regex: Type.String(), $options: Type.String() },
+      local: { $regex: Type.String(), $options: Type.String() },
+      english: { $regex: Type.String(), $options: Type.String() }
+    }),
     // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
+    Type.Object(
+      {
+        $intersect: Type.Optional(Type.String())
+      },
+      { additionalProperties: false }
+    )
   ],
   { additionalProperties: false }
 )

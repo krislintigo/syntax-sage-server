@@ -17,6 +17,9 @@ import {
 import type { Application } from '../../declarations'
 import { TermService, getOptions } from './term.class'
 import { termPath, termMethods } from './term.shared'
+import { $join } from '../../hooks/join'
+import { $pipeline } from '../../hooks/pipeline'
+import { $unpaginate } from '../../hooks/unpaginate'
 
 export * from './term.class'
 export * from './term.schema'
@@ -37,11 +40,12 @@ export const terms = (app: Application) => {
         authenticate('jwt'),
         schemaHooks.resolveExternal(termExternalResolver),
         schemaHooks.resolveResult(termResolver)
-      ]
+      ],
+      find: [$unpaginate()]
     },
     before: {
       all: [schemaHooks.validateQuery(termQueryValidator), schemaHooks.resolveQuery(termQueryResolver)],
-      find: [],
+      find: [$join([{ as: 'word', from: 'words', localField: 'wordId' }]), $pipeline()],
       get: [],
       create: [schemaHooks.validateData(termDataValidator), schemaHooks.resolveData(termDataResolver)],
       patch: [schemaHooks.validateData(termPatchValidator), schemaHooks.resolveData(termPatchResolver)],

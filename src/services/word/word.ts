@@ -17,9 +17,11 @@ import {
 import type { Application } from '../../declarations'
 import { WordService, getOptions } from './word.class'
 import { wordPath, wordMethods } from './word.shared'
-import { $intersect } from '../../hooks/$intersect'
+import { $intersect } from '../../hooks/intersect'
 import { NullableAdapterId } from '@feathersjs/mongodb'
 import { ServiceParams } from '@feathersjs/transport-commons/lib/http'
+import { $pipeline } from '../../hooks/pipeline'
+import { $unpaginate } from '../../hooks/unpaginate'
 
 export * from './word.class'
 export * from './word.schema'
@@ -41,11 +43,11 @@ export const words = (app: Application) => {
         schemaHooks.resolveExternal(wordExternalResolver),
         schemaHooks.resolveResult(wordResolver)
       ],
-      find: [$intersect()]
+      find: [$unpaginate()]
     },
     before: {
-      all: [/* schemaHooks.validateQuery(wordQueryValidator) */ schemaHooks.resolveQuery(wordQueryResolver)],
-      find: [],
+      all: [schemaHooks.validateQuery(wordQueryValidator), schemaHooks.resolveQuery(wordQueryResolver)],
+      find: [$intersect(), $pipeline()],
       get: [],
       create: [schemaHooks.validateData(wordDataValidator), schemaHooks.resolveData(wordDataResolver)],
       patch: [schemaHooks.validateData(wordPatchValidator), schemaHooks.resolveData(wordPatchResolver)],
@@ -53,11 +55,6 @@ export const words = (app: Application) => {
     },
     after: {
       all: [],
-      patch: [
-        (ctx) => {
-          console.log(ctx.event)
-        }
-      ],
       remove: [
         async (context) => {
           await context.app.service('terms').remove(null, { query: { wordId: context.id } })
