@@ -39,12 +39,14 @@ export const terms = (app: Application) => {
       all: [
         authenticate('jwt'),
         schemaHooks.resolveExternal(termExternalResolver),
-        schemaHooks.resolveResult(termResolver)
+        schemaHooks.resolveResult(termResolver),
+        schemaHooks.validateQuery(termQueryValidator),
+        schemaHooks.resolveQuery(termQueryResolver)
       ],
       find: [$unpaginate()]
     },
     before: {
-      all: [schemaHooks.validateQuery(termQueryValidator), schemaHooks.resolveQuery(termQueryResolver)],
+      all: [],
       find: [$join([{ as: 'word', from: 'words', localField: 'wordId' }]), $pipeline()],
       get: [],
       create: [schemaHooks.validateData(termDataValidator), schemaHooks.resolveData(termDataResolver)],

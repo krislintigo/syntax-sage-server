@@ -41,12 +41,14 @@ export const words = (app: Application) => {
       all: [
         authenticate('jwt'),
         schemaHooks.resolveExternal(wordExternalResolver),
-        schemaHooks.resolveResult(wordResolver)
+        schemaHooks.resolveResult(wordResolver),
+        schemaHooks.validateQuery(wordQueryValidator),
+        schemaHooks.resolveQuery(wordQueryResolver)
       ],
       find: [$unpaginate()]
     },
     before: {
-      all: [schemaHooks.validateQuery(wordQueryValidator), schemaHooks.resolveQuery(wordQueryResolver)],
+      all: [],
       find: [$intersect(), $pipeline()],
       get: [],
       create: [schemaHooks.validateData(wordDataValidator), schemaHooks.resolveData(wordDataResolver)],

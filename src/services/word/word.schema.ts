@@ -59,7 +59,8 @@ export const wordQuerySchema = Type.Intersect(
     // Add additional query properties here
     Type.Object(
       {
-        $intersect: Type.Optional(Type.String())
+        $intersect: Type.Optional(Type.String()),
+        $paginate: Type.Optional(Type.Boolean())
       },
       { additionalProperties: false }
     )
