@@ -17,8 +17,11 @@ export const wordSchema = Type.Object(
     original: Type.String(),
     local: Type.String(),
     english: Type.String(),
-    notes: Type.String(),
 
+    notes: Type.Object({
+      annotation: Type.String(),
+      grammar: Type.String()
+    }),
     categories: Type.Array(Type.String()),
 
     ...createdAndUpdatedAt
