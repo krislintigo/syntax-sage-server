@@ -18,11 +18,13 @@ export const termSchema = Type.Object(
     userId: ObjectIdSchema(),
 
     favorite: Type.Boolean(),
+    studied: Type.Boolean(),
     studies: Type.Object({
       match: Type.Number({ minimum: 0 }),
       audio: Type.Number({ minimum: 0 }),
       writing: Type.Number({ minimum: 0 })
     }),
+    // status: Type.String({ enum: ['not-studied', 'learning', 'mastered'] }),
 
     ...createdAndUpdatedAt,
     lastStudiedAt: dateString('date-time')
