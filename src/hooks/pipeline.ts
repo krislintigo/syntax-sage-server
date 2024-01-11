@@ -3,11 +3,9 @@ import { type HookContext } from '@feathersjs/feathers'
 export const $pipeline = () => async (ctx: HookContext) => {
   if (!ctx.params.customPipeline) return
 
-  // console.log(ctx.params.query, ctx.path)
   const {
     filters: { $limit: limit, $skip: skip }
   } = ctx.service.filterQuery(null, ctx.params)
-  // console.log(limit, skip)
 
   const pipeline = [
     ...ctx.params.pipeline,

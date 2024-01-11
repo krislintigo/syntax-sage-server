@@ -24,7 +24,7 @@ export const termSchema = Type.Object(
       audio: Type.Number({ minimum: 0 }),
       writing: Type.Number({ minimum: 0 })
     }),
-    // status: Type.String({ enum: ['not-studied', 'learning', 'mastered'] }),
+    status: Type.String({ enum: ['not-studied', 'learning', 'mastered'] }),
 
     ...createdAndUpdatedAt,
     lastStudiedAt: dateString('date-time')
@@ -36,13 +36,22 @@ export const termValidator = getValidator(termSchema, dataValidator)
 export const termResolver = resolve<Term, HookContext<TermService>>({
   word: virtual(async ({ wordId }, { app }) => {
     return await app.service('words').get(wordId as string)
+  }),
+  status: virtual(async ({ studies }): Promise<Term['status'] | undefined> => {
+    const entries = Object.entries(studies)
+    const notStudiedFlag = entries.every(([, value]) => value === 0)
+    if (notStudiedFlag) return 'not-studied'
+    const learningFlag = entries.some(([, value]) => value > 0) && entries.some(([, value]) => value < 3)
+    if (learningFlag) return 'learning'
+    const masteredFlag = entries.every(([, value]) => value >= 3)
+    if (masteredFlag) return 'mastered'
   })
 })
 
 export const termExternalResolver = resolve<Term, HookContext<TermService>>({})
 
 // Schema for creating new entries
-export const termDataSchema = Type.Omit(termSchema, ['_id', 'word'], {
+export const termDataSchema = Type.Omit(termSchema, ['_id', 'word', 'status'], {
   $id: 'TermData'
 })
 export type TermData = Static<typeof termDataSchema>
