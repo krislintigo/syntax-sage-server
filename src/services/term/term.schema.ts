@@ -1,6 +1,6 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve, virtual } from '@feathersjs/schema'
-import { Type, getValidator, querySyntax, ObjectIdSchema } from '@feathersjs/typebox'
+import { Type, getValidator, querySyntax, ObjectIdSchema, StringEnum } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 
 import type { HookContext } from '../../declarations'
@@ -24,7 +24,7 @@ export const termSchema = Type.Object(
       audio: Type.Number({ minimum: 0 }),
       writing: Type.Number({ minimum: 0 })
     }),
-    status: Type.String({ enum: ['not-studied', 'learning', 'mastered'] }),
+    status: StringEnum(['not-studied', 'learning', 'mastered']),
 
     ...createdAndUpdatedAt,
     lastStudiedAt: dateString('date-time')
