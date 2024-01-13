@@ -11,7 +11,22 @@ export const $status = () => (context: HookContext) => {
       context.params.query.$and = [{ 'studies.match': 0 }, { 'studies.writing': 0 }, { 'studies.audio': 0 }]
       break
     case 'learning':
-      // when will be needed
+      context.params.query.$and = [
+        {
+          $or: [
+            { 'studies.match': { $gt: 0 } },
+            { 'studies.writing': { $gt: 0 } },
+            { 'studies.audio': { $gt: 0 } }
+          ]
+        },
+        {
+          $or: [
+            { 'studies.match': { $lt: 3 } },
+            { 'studies.writing': { $lt: 3 } },
+            { 'studies.audio': { $lt: 3 } }
+          ]
+        }
+      ]
       break
     case 'mastered':
       context.params.query.$and = [

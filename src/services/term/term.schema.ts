@@ -20,6 +20,7 @@ export const termSchema = Type.Object(
 
     favorite: Type.Boolean(),
     studied: Type.Boolean(),
+    // viewed: Type.Boolean(),
     studies: Type.Object({
       match: Type.Number({ minimum: 0 }),
       audio: Type.Number({ minimum: 0 }),
