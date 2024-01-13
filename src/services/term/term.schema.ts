@@ -8,6 +8,7 @@ import { dataValidator, queryValidator } from '../../validators'
 import type { TermService } from './term.class'
 import { wordSchema } from '../word/word.schema'
 import { createdAndUpdatedAt, dateString } from '../common.schema'
+import { resolveQueryObjectId } from '@feathersjs/mongodb'
 
 // Main data model schema
 export const termSchema = Type.Object(
@@ -85,4 +86,8 @@ export const termQuerySchema = Type.Intersect(
 )
 export type TermQuery = Static<typeof termQuerySchema>
 export const termQueryValidator = getValidator(termQuerySchema, queryValidator)
-export const termQueryResolver = resolve<TermQuery, HookContext<TermService>>({})
+
+export const termQueryResolver = resolve<TermQuery, HookContext<TermService>>({
+  // @ts-expect-error test
+  _id: resolveQueryObjectId
+})
