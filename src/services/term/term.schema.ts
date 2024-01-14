@@ -89,6 +89,6 @@ export type TermQuery = Static<typeof termQuerySchema>
 export const termQueryValidator = getValidator(termQuerySchema, queryValidator)
 
 export const termQueryResolver = resolve<TermQuery, HookContext<TermService>>({
-  // @ts-expect-error test
+  // @ts-expect-error wrong ts
   _id: resolveQueryObjectId
 })

@@ -7,6 +7,7 @@ import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
 import type { WordService } from './word.class'
 import { createdAndUpdatedAt } from '../common.schema'
+import { resolveQueryObjectId } from '@feathersjs/mongodb'
 
 // Main data model schema
 export const wordSchema = Type.Object(
@@ -72,4 +73,7 @@ export const wordQuerySchema = Type.Intersect(
 )
 export type WordQuery = Static<typeof wordQuerySchema>
 export const wordQueryValidator = getValidator(wordQuerySchema, queryValidator)
-export const wordQueryResolver = resolve<WordQuery, HookContext<WordService>>({})
+export const wordQueryResolver = resolve<WordQuery, HookContext<WordService>>({
+  // @ts-expect-error wrong ts
+  _id: resolveQueryObjectId
+})
