@@ -68,7 +68,7 @@
     "@feathersjs/rest-client": "^5.0.14",
     "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.0",
+    "@types/node": "^20.11.4",
     "axios": "^1.6.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
@@ -79,7 +79,7 @@
     "migrate-mongo": "^11.0.0",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.2",
-    "prettier": "^3.1.1",
+    "prettier": "^3.2.2",
     "shx": "^0.3.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
