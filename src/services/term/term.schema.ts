@@ -20,7 +20,7 @@ export const termSchema = Type.Object(
 
     favorite: Type.Boolean(),
     studied: Type.Boolean(),
-    // viewed: Type.Boolean(),
+    viewed: Type.Boolean(),
     studies: Type.Object({
       match: Type.Number({ minimum: 0 }),
       audio: Type.Number({ minimum: 0 }),
@@ -39,11 +39,11 @@ export const termResolver = resolve<Term, HookContext<TermService>>({
   word: virtual(async ({ wordId }, { app }) => {
     return await app.service('words').get(wordId as string)
   }),
-  status: virtual(async ({ studies }): Promise<Term['status'] | undefined> => {
+  status: virtual(async ({ viewed, studies }): Promise<Term['status'] | undefined> => {
     const entries = Object.entries(studies)
-    const notStudiedFlag = entries.every(([, value]) => value === 0)
+    const notStudiedFlag = !viewed
     if (notStudiedFlag) return 'not-studied'
-    const learningFlag = entries.some(([, value]) => value > 0) && entries.some(([, value]) => value < 3)
+    const learningFlag = entries.some(([, value]) => value < 3)
     if (learningFlag) return 'learning'
     const masteredFlag = entries.every(([, value]) => value >= 3)
     if (masteredFlag) return 'mastered'
