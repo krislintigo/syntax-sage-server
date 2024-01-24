@@ -17,11 +17,9 @@ import {
 import type { Application } from '../../declarations'
 import { WordService, getOptions } from './word.class'
 import { wordPath, wordMethods } from './word.shared'
-import { $intersect } from '../../hooks/intersect'
-import { NullableAdapterId } from '@feathersjs/mongodb'
-import { ServiceParams } from '@feathersjs/transport-commons/lib/http'
 import { $pipeline } from '../../hooks/pipeline'
 import { $unpaginate } from '../../hooks/unpaginate'
+import { $intersect } from './word.hooks'
 
 export * from './word.class'
 export * from './word.schema'

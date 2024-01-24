@@ -1,4 +1,4 @@
-import { type HookContext } from '../declarations'
+import { type HookContext } from '../../declarations'
 import { ObjectId } from 'mongodb'
 
 export const $intersect = () => async (context: HookContext) => {
