@@ -7,7 +7,7 @@ export const $status = () => (context: HookContext) => {
 
   delete context.params.query.status
   switch (status) {
-    case 'not-studied':
+    case 'new':
       context.params.query.viewed = false
       break
     case 'learning':

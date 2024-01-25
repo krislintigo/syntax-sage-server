@@ -26,7 +26,7 @@ export const termSchema = Type.Object(
       audio: Type.Number({ minimum: 0 }),
       writing: Type.Number({ minimum: 0 })
     }),
-    status: StringEnum(['not-studied', 'learning', 'mastered']),
+    status: StringEnum(['new', 'learning', 'mastered']),
 
     ...createdAndUpdatedAt,
     lastStudiedAt: dateString('date-time')
@@ -41,8 +41,8 @@ export const termResolver = resolve<Term, HookContext<TermService>>({
   }),
   status: virtual(async ({ viewed, studies }): Promise<Term['status'] | undefined> => {
     const entries = Object.entries(studies)
-    const notStudiedFlag = !viewed
-    if (notStudiedFlag) return 'not-studied'
+    const newFlag = !viewed
+    if (newFlag) return 'new'
     const learningFlag = entries.some(([, value]) => value < 3)
     if (learningFlag) return 'learning'
     const masteredFlag = entries.every(([, value]) => value >= 3)
@@ -79,6 +79,7 @@ export const termQuerySchema = Type.Intersect(
         word: Type.Optional(Type.Object({})),
 
         $repeat: Type.Optional(Type.Boolean()),
+        $sample: Type.Optional(Type.Number({ minimum: 0 })),
         $paginate: Type.Optional(Type.Boolean())
       },
       { additionalProperties: false }

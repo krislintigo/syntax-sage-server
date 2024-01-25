@@ -21,6 +21,7 @@ import { $join } from '../../hooks/join'
 import { $pipeline } from '../../hooks/pipeline'
 import { $unpaginate } from '../../hooks/unpaginate'
 import { $repeat, $status } from './term.hooks'
+import { $sample } from '../../hooks/sample'
 
 export * from './term.class'
 export * from './term.schema'
@@ -48,7 +49,13 @@ export const terms = (app: Application) => {
     },
     before: {
       all: [],
-      find: [$status(), $join([{ as: 'word', from: 'words', localField: 'wordId' }]), $repeat(), $pipeline()],
+      find: [
+        $status(),
+        $join([{ as: 'word', from: 'words', localField: 'wordId' }]),
+        $repeat(),
+        $sample(),
+        $pipeline()
+      ],
       get: [],
       create: [schemaHooks.validateData(termDataValidator), schemaHooks.resolveData(termDataResolver)],
       patch: [schemaHooks.validateData(termPatchValidator), schemaHooks.resolveData(termPatchResolver)],
